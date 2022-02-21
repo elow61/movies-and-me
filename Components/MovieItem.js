@@ -7,7 +7,6 @@ import { getImage } from '../api/TMDB'
 class MovieItem extends React.Component {
     render() {
         const {movie, displayDetailForMovie} = this.props
-        console.log('MovieItem ', this.props)
         return (
             <TouchableOpacity style={styles.main_container} onPress={() => displayDetailForMovie(movie.id)}>
                 <Image style={styles.images} source={{uri: getImage(movie.poster_path)}}/>
@@ -74,4 +73,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default MovieItem
+export default MovieItem;

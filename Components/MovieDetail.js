@@ -4,10 +4,9 @@ import { StyleSheet, View, Text } from 'react-native';
 
 class MovieDetail extends React.Component {
     render() {
-        console.log('In details : ', this.props.navigation)
         return (
             <View style={style.main_container}>
-                <Text>Détail du film</Text>
+                <Text>Détail du film {this.props.route.params.idMovie} </Text>
             </View>
         )
     }
@@ -19,4 +18,4 @@ const style = StyleSheet.create({
     }
 })
 
-export default MovieDetail
+export default MovieDetail;
