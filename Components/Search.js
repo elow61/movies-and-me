@@ -15,6 +15,10 @@ class Search extends React.Component {
         this.state = {movies: [], isLoading: false}
     }
 
+    _displayDetailForMovie = (idMovie) => {
+        this.props.navigation.navigate('MovieDetail', {idMovie: idMovie});
+    }
+
     _searchText(text) {
         this.searchedText = text
     }
@@ -22,12 +26,7 @@ class Search extends React.Component {
     _searchMovies() {
         this.page = 0
         this.totalPages = 0
-        this.setState(
-            {movies: []},
-            () => {
-            console.log('Page : ' + this.page + '/ TotalPages : ' + this.totalPages + '/ Nombre de films : ' + this.state.movies.length)
-            this._loadMovies()
-        })
+        this.setState({movies: []}, () => {this._loadMovies()})
     }
 
     _loadMovies() {
@@ -56,7 +55,6 @@ class Search extends React.Component {
     }
 
     render() {
-        console.log(this.state.isLoading)
         return (
             <View style={styles.main_container}>
                 <View>
@@ -75,7 +73,7 @@ class Search extends React.Component {
                     <FlatList
                         data={this.state.movies}
                         keyExtractor={(item) => item.id.toString()}
-                        renderItem={({item}) => <MovieItem movie={item}/>}
+                        renderItem={({item}) => <MovieItem movie={item} displayDetailForMovie={this._displayDetailForMovie}/>}
                         onEndReachedThreshold={0.5}
                         onEndReached={() => {
                             if (this.page < this.totalPages) {
@@ -89,12 +87,10 @@ class Search extends React.Component {
         )
     }
 }
-// TEST
 
 const styles = StyleSheet.create({
     main_container: {
         flex: 1,
-        marginTop: 50,
         // justifyContent: 'center',
         // alignItems: 'center',
     },
