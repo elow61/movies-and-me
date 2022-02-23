@@ -1,7 +1,9 @@
 // Components/MovieDetail.js
-import React from "react";
+import React from 'react';
 import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image } from 'react-native';
-import { getImage, getDetails } from '../api/TMDB'
+import moment from 'moment';
+import numeral from 'numeral';
+import { getImage, getDetails } from '../api/TMDB';
 
 class MovieDetail extends React.Component {
 
@@ -29,10 +31,10 @@ class MovieDetail extends React.Component {
                     <Text style={styles.title}>{this.state.movie.title}</Text>
                     <Text style={styles.desc_text}>{movie.overview}</Text>
                     <View>
-                        <Text>Released the {movie.release_date}</Text>
+                        <Text>Released the {moment(movie.release_date).format('DD/MM/YYYY')}</Text>
                         <Text>Note: {movie.vote_average} / 10</Text>
                         <Text>Vote number: {movie.vote_count}</Text>
-                        <Text>Budget: {movie.budget}</Text>
+                        <Text>Budget: {numeral(movie.budget).format('0,0,00 $')}</Text>
                         <Text>Gender(s): {movie.genres.map(i => {return i.name}).join(' / ')}</Text>
                         <Text>Companie(s): {movie.production_companies.map(i => {return i.name}).join(' / ')}</Text>
                     </View>
