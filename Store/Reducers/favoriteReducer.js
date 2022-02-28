@@ -1,12 +1,12 @@
 const initialState = {favoriteMovie: []}
 
-function favoriteReducer(state = initialState, action) {
+function toggleFavorite(state = initialState, action) {
     let nextState;
     switch (action.type) {
         case 'TOGGLE_FAVORITE':
-            const index = state.favoriteMovie.findIndex(item => item.id === action.value.id);
-            if (index !== -1) {
-                nextState = {...state, favoriteMovie: state.favoriteMovie.filter((item, i) => i.id !== index)}
+            const favIndex = state.favoriteMovie.findIndex(item => item.id === action.value.id);
+            if (favIndex !== -1) {
+                nextState = {...state, favoriteMovie: state.favoriteMovie.filter((item, index) => index !== favIndex)}
             } else {
                 nextState = {...state, favoriteMovie: [...state.favoriteMovie, action.value]}
             }
@@ -16,4 +16,4 @@ function favoriteReducer(state = initialState, action) {
     }
 }
 
-export default favoriteReducer;
+export default toggleFavorite;

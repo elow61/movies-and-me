@@ -1,6 +1,6 @@
 // Components/MovieDetail.js
 import React from 'react';
-import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image } from 'react-native';
+import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Image, TouchableOpacity } from 'react-native';
 import moment from 'moment';
 import numeral from 'numeral';
 import { getImage, getDetails } from '../api/TMDB';
@@ -23,15 +23,34 @@ class MovieDetail extends React.Component {
         }
     }
 
+    _toggleFavorite() {
+        const action = {type: 'TOGGLE_FAVORITE', value: this.state.movie}
+        this.props.dispatch(action)
+    }
+
+    _displayFavoriteImage() {
+        var sourceImage = require('../Images/ic_favorite_border.png');
+        if (this.props.favoriteMovie.findIndex(item => item.id === this.state.movie.id) !== -1) {
+            sourceImage = require('../Images/ic_favorite.png');
+        }
+        return (
+            <Image style={styles.favorite_image} source={sourceImage}/>
+        )
+    }
+
     _displayMovie() {
-        if (this.state.movie != undefined) {
-            let movie = this.state.movie;
+        let movie = this.state.movie;
+        if (movie != undefined) {
             return (
                 <ScrollView style={styles.scrollview_container}>
                     <Image style={styles.images} source={{uri: getImage(movie.poster_path)}}/>
-                    <Text style={styles.title}>{this.state.movie.title}</Text>
+                    <Text style={styles.title}>{movie.title}</Text>
+                    
+                    <TouchableOpacity style={styles.favorite_container} onPress={() => this._toggleFavorite()}>
+                        {this._displayFavoriteImage()}
+                    </TouchableOpacity>
                     <Text style={styles.desc_text}>{movie.overview}</Text>
-                    <View>
+                    <View style={styles.informations}>
                         <Text>Released the {moment(movie.release_date).format('DD/MM/YYYY')}</Text>
                         <Text>Note: {movie.vote_average} / 10</Text>
                         <Text>Vote number: {movie.vote_count}</Text>
@@ -51,7 +70,6 @@ class MovieDetail extends React.Component {
     }
 
     render() {
-        console.log('Component render')
         return (
             <View style={styles.main_container}>
                 {this._displayLoading()}
@@ -89,9 +107,12 @@ const styles = StyleSheet.create({
         textAlign: 'justify',
         margin: 10,
     },
+    informations: {margin: 10},
+    favorite_container: {alignItems: 'center'},
+    favorite_image: {width: 40, height: 40}
 })
 
 const mapStateToProps = (state) => {
-    return favoriteMovie: state.favoriteMovie;
+    return {favoriteMovie: state.favoriteMovie};
 }
 export default connect(mapStateToProps)(MovieDetail);

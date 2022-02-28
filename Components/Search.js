@@ -1,8 +1,9 @@
 // Component/Search.js
-import React from 'react'
-import { StyleSheet, View, Text, TextInput, Button, FlatList, ActivityIndicator } from 'react-native'
-import MovieItem from './MovieItem'
-import { getMovies } from '../api/TMDB'
+import React from 'react';
+import { StyleSheet, View, Text, TextInput, Button, FlatList, ActivityIndicator } from 'react-native';
+import MovieItem from './MovieItem';
+import { getMovies } from '../api/TMDB';
+import { connect } from 'react-redux';
 
 
 class Search extends React.Component {
@@ -54,6 +55,13 @@ class Search extends React.Component {
         }
     }
 
+    _isFavorite(movie) {
+        if (this.props.favoriteMovie.findIndex(item => item.id === movie.id) !== -1) {
+            return true;
+        }
+        return false;
+    }
+
     render() {
         return (
             <View style={styles.main_container}>
@@ -69,11 +77,11 @@ class Search extends React.Component {
                         style={styles.Button}
                         onPress={() => this._searchMovies()}
                     />
-                    
                     <FlatList
                         data={this.state.movies}
+                        extraData={this.props.favoriteMovie}
                         keyExtractor={(item) => item.id.toString()}
-                        renderItem={({item}) => <MovieItem movie={item} displayDetailForMovie={this._displayDetailForMovie}/>}
+                        renderItem={({item}) => <MovieItem movie={item} isFavorite={this._isFavorite(item)} displayDetailForMovie={this._displayDetailForMovie}/>}
                         onEndReachedThreshold={0.5}
                         onEndReached={() => {
                             if (this.page < this.totalPages) {
@@ -114,4 +122,7 @@ const styles = StyleSheet.create({
     }
 })
 
-export default Search
+const mapStateToProps = (state) => {
+    return {favoriteMovie: state.favoriteMovie};
+}
+export default connect(mapStateToProps)(Search);

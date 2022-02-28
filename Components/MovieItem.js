@@ -5,13 +5,21 @@ import { getImage } from '../api/TMDB'
 
 
 class MovieItem extends React.Component {
+
+    _isFavorite() {
+        if (this.props.isFavorite) {
+            return <Image style={styles.is_favorite} source={require('../Images/ic_favorite.png')}/>
+        }
+    }
+
     render() {
-        const {movie, displayDetailForMovie} = this.props
+        const {movie, displayDetailForMovie} = this.props;
         return (
             <TouchableOpacity style={styles.main_container} onPress={() => displayDetailForMovie(movie.id)}>
                 <Image style={styles.images} source={{uri: getImage(movie.poster_path)}}/>
                 <View style={styles.content}>
                     <View style={styles.header}>
+                        {this._isFavorite()}
                         <Text style={styles.title_text}>{movie.title}</Text>
                         <Text style={styles.vote}>{movie.vote_average}</Text>
                     </View>
@@ -53,7 +61,11 @@ const styles = StyleSheet.create({
         flexWrap: 'wrap',
         paddingRight: 5
     },
-    
+    is_favorite: {
+        width: 20,
+        height: 20,
+        marginTop: 3,
+    },
     vote: {
         fontWeight: 'bold',
         fontSize: 26,
