@@ -2,8 +2,8 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, Button, FlatList, ActivityIndicator } from 'react-native';
 import MovieItem from './MovieItem';
+import MovieList from './MovieList';
 import { getMovies } from '../api/TMDB';
-import { connect } from 'react-redux';
 
 
 class Search extends React.Component {
@@ -16,10 +16,6 @@ class Search extends React.Component {
         this.state = {movies: [], isLoading: false}
     }
 
-    _displayDetailForMovie = (idMovie) => {
-        this.props.navigation.navigate('MovieDetail', {idMovie: idMovie});
-    }
-
     _searchText(text) {
         this.searchedText = text
     }
@@ -30,7 +26,7 @@ class Search extends React.Component {
         this.setState({movies: []}, () => {this._loadMovies()})
     }
 
-    _loadMovies() {
+    _loadMovies = () => {
         if (this.searchedText.length > 0) {
             // Begin loading
             this.setState({isLoading: true})
@@ -55,42 +51,28 @@ class Search extends React.Component {
         }
     }
 
-    _isFavorite(movie) {
-        if (this.props.favoriteMovie.findIndex(item => item.id === movie.id) !== -1) {
-            return true;
-        }
-        return false;
-    }
-
     render() {
         return (
             <View style={styles.main_container}>
-                <View>
-                    <TextInput
-                        placeholder="Movie's title"
-                        style={styles.TextInput}
-                        onChangeText={(text) => this._searchText(text)}
-                        onSubmitEditing={() => this._searchMovies()}
-                    />
-                    <Button 
-                        title="Search"
-                        style={styles.Button}
-                        onPress={() => this._searchMovies()}
-                    />
-                    <FlatList
-                        data={this.state.movies}
-                        extraData={this.props.favoriteMovie}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({item}) => <MovieItem movie={item} isFavorite={this._isFavorite(item)} displayDetailForMovie={this._displayDetailForMovie}/>}
-                        onEndReachedThreshold={0.5}
-                        onEndReached={() => {
-                            if (this.page < this.totalPages) {
-                                this._loadMovies()
-                            }
-                        }}
-                    />
-                    {this._displayLoading()}
-                </View>
+                <TextInput
+                    placeholder="Movie's title"
+                    style={styles.TextInput}
+                    onChangeText={(text) => this._searchText(text)}
+                    onSubmitEditing={() => this._searchMovies()}
+                />
+                <Button 
+                    title="Search"
+                    style={styles.Button}
+                    onPress={() => this._searchMovies()}
+                />
+                <MovieList
+                    movies={this.state.movies}
+                    navigation={this.props.navigation}
+                    loadMovie={this._loadMovies}
+                    page={this.page}
+                    totalPages={this.totalPages}
+                />
+                {this._displayLoading()}
             </View>
         )
     }
@@ -99,8 +81,6 @@ class Search extends React.Component {
 const styles = StyleSheet.create({
     main_container: {
         flex: 1,
-        // justifyContent: 'center',
-        // alignItems: 'center',
     },
     TextInput: {
         marginLeft: 5,
@@ -122,7 +102,4 @@ const styles = StyleSheet.create({
     }
 })
 
-const mapStateToProps = (state) => {
-    return {favoriteMovie: state.favoriteMovie};
-}
-export default connect(mapStateToProps)(Search);
+export default Search;
