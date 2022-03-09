@@ -40,7 +40,7 @@ function NavigationTabs() {
                         let iconName;
                         if (route.name === 'Movies') {
                             iconName = require('../Images/ic_search.png');
-                        } else if (route.name == 'Favorites') {
+                        } else if (route.name == 'FavoritesTab') {
                             iconName = require('../Images/ic_favorite.png');
                         }
                         return <Image source={iconName} style={styles.icons}/>;
@@ -48,7 +48,7 @@ function NavigationTabs() {
                 })}
             >
                 <Tab.Screen name="Movies" component={NavigationSearch} options={{tabBarShowLabel: false, tabBarActiveBackgroundColor: '#DDDDDD'}}/>
-                <Tab.Screen name="Favorites" component={NavigationFavorites} options={{tabBarShowLabel: false, tabBarActiveBackgroundColor: '#DDDDDD'}}/>
+                <Tab.Screen name="FavoritesTab" component={NavigationFavorites} options={{tabBarShowLabel: false, tabBarActiveBackgroundColor: '#DDDDDD'}}/>
             </Tab.Navigator>
         </NavigationContainer>
     );

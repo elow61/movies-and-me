@@ -1,7 +1,6 @@
 // Component/Search.js
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, Button, FlatList, ActivityIndicator } from 'react-native';
-import MovieItem from './MovieItem';
+import { StyleSheet, View, TextInput, Button, ActivityIndicator } from 'react-native';
 import MovieList from './MovieList';
 import { getMovies } from '../api/TMDB';
 
@@ -71,6 +70,7 @@ class Search extends React.Component {
                     loadMovie={this._loadMovies}
                     page={this.page}
                     totalPages={this.totalPages}
+                    favList={false}
                 />
                 {this._displayLoading()}
             </View>

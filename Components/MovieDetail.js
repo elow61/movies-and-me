@@ -10,7 +10,7 @@ class MovieDetail extends React.Component {
 
     constructor(props) {
         super(props);
-        this.state = {movie: undefined, isLoading: true}
+        this.state = {movie: undefined, isLoading: false}
     }
 
     _displayLoading() {
@@ -64,6 +64,11 @@ class MovieDetail extends React.Component {
     }
 
     componentDidMount() {
+        const indexFavMovie = this.props.favoriteMovie.findIndex(item => item.id === this.props.route.params.idMovie)
+        if (indexFavMovie !== -1) {
+            this.setState(({movie: this.props.favoriteMovie[indexFavMovie]}))
+            return;
+        }
         getDetails(this.props.route.params.idMovie).then(data => {
             this.setState({movie: data, isLoading: false})
         })
