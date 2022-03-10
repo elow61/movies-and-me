@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Search from '../Components/Search'
 import MovieDetail from '../Components/MovieDetail';
 import Favorites from '../Components/Favorites';
+import Test from '../Components/Test';
 
 const SearchStack = createNativeStackNavigator()
 const Tab = createBottomTabNavigator()
@@ -49,6 +50,7 @@ function NavigationTabs() {
             >
                 <Tab.Screen name="Movies" component={NavigationSearch} options={{tabBarShowLabel: false, tabBarActiveBackgroundColor: '#DDDDDD'}}/>
                 <Tab.Screen name="FavoritesTab" component={NavigationFavorites} options={{tabBarShowLabel: false, tabBarActiveBackgroundColor: '#DDDDDD'}}/>
+                <Tab.Screen name="Test" component={Test}/>
             </Tab.Navigator>
         </NavigationContainer>
     );
