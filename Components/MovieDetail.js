@@ -8,19 +8,6 @@ import { connect } from 'react-redux';
 
 class MovieDetail extends React.Component {
 
-    static navigationOptions = ({navigation}) => {
-        console.log(navigation)
-        const {params} = navigation.state;
-        console.log(params)
-        if (params.movie != undefined && Platform.OS === 'ios') {
-            return {
-                headerRight: <TouchableOpacity style={styles.button_share_header_right} onPress={() => params.shareMovie()}>
-                    <Image style={styles.share_image} source={require('../Images/ic_share.ios.png')}/>
-                </TouchableOpacity>
-            }
-        }
-    }
-
     constructor(props) {
         super(props);
         this.state = {movie: undefined, isLoading: false}
@@ -51,13 +38,6 @@ class MovieDetail extends React.Component {
         )
     }
 
-    _updateNavigationParams() {
-        this.props.navigation.setParams({
-            shareMovie: this._shareMovie(),
-            movie: this.state.movie
-        })
-    }
-
     _displayButtonShare() {
         const {movie} = this.state;
         if (movie != undefined && Platform.OS === 'android') {
@@ -66,7 +46,17 @@ class MovieDetail extends React.Component {
                     <Image style={styles.share_image} source={require('../Images/ic_share.android.png')}/>
                 </TouchableOpacity>
             )
-        }
+        } else {
+            return (
+                this.props.navigation.setOptions({
+                    headerRight: () => (
+                        <TouchableOpacity style={styles.button_share_header_right} onPress={() => this._shareMovie()}>
+                            <Image style={styles.share_image} source={require('../Images/ic_share.ios.png')}/>
+                        </TouchableOpacity>
+                    )
+                })
+            )
+        } 
     }
 
     _shareMovie = () => {
@@ -104,14 +94,12 @@ class MovieDetail extends React.Component {
         if (indexFavMovie !== -1) {
             this.setState(
                 {movie: this.props.favoriteMovie[indexFavMovie]},
-                () => {this._updateNavigationParams()}
             )
             return;
         }
         getDetails(this.props.route.params.idMovie).then(data => {
             this.setState(
                 {movie: data, isLoading: false},
-                () => {this._updateNavigationParams()}
             )
         })
     }
