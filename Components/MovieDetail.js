@@ -3,8 +3,10 @@ import React from 'react';
 import { StyleSheet, View, Text, ActivityIndicator, ScrollView, Share, Image, TouchableOpacity, Platform } from 'react-native';
 import moment from 'moment';
 import numeral from 'numeral';
-import { getImage, getDetails } from '../api/TMDB';
 import { connect } from 'react-redux';
+
+import { getImage, getDetails } from '../api/TMDB';
+import BigHeart from '../Animations/BigHeart';
 
 class MovieDetail extends React.Component {
 
@@ -30,11 +32,15 @@ class MovieDetail extends React.Component {
 
     _displayFavoriteImage() {
         var sourceImage = require('../Images/ic_favorite_border.png');
+        var isFavorite = false;
         if (this.props.favoriteMovie.findIndex(item => item.id === this.state.movie.id) !== -1) {
             sourceImage = require('../Images/ic_favorite.png');
+            isFavorite = true;
         }
         return (
-            <Image style={styles.favorite_image} source={sourceImage}/>
+            <BigHeart isFavorite={isFavorite}>
+                <Image style={styles.favorite_image} source={sourceImage}/>
+            </BigHeart>
         )
     }
 
@@ -46,17 +52,18 @@ class MovieDetail extends React.Component {
                     <Image style={styles.share_image} source={require('../Images/ic_share.android.png')}/>
                 </TouchableOpacity>
             )
-        } else {
-            return (
-                this.props.navigation.setOptions({
-                    headerRight: () => (
-                        <TouchableOpacity style={styles.button_share_header_right} onPress={() => this._shareMovie()}>
-                            <Image style={styles.share_image} source={require('../Images/ic_share.ios.png')}/>
-                        </TouchableOpacity>
-                    )
-                })
-            )
-        } 
+        }
+        // else {
+        //     return (
+        //         this.props.navigation.setOptions({
+        //             headerRight: () => (
+        //                 <TouchableOpacity style={styles.button_share_header_right} onPress={() => this._shareMovie()}>
+        //                     <Image style={styles.share_image} source={require('../Images/ic_share.ios.png')}/>
+        //                 </TouchableOpacity>
+        //             )
+        //         })
+        //     )
+        // } 
     }
 
     _shareMovie = () => {
@@ -71,7 +78,6 @@ class MovieDetail extends React.Component {
                 <ScrollView style={styles.scrollview_container}>
                     <Image style={styles.images} source={{uri: getImage(movie.poster_path)}}/>
                     <Text style={styles.title}>{movie.title}</Text>
-                    
                     <TouchableOpacity style={styles.favorite_container} onPress={() => this._toggleFavorite()}>
                         {this._displayFavoriteImage()}
                     </TouchableOpacity>
@@ -145,7 +151,7 @@ const styles = StyleSheet.create({
     },
     informations: {margin: 10},
     favorite_container: {alignItems: 'center'},
-    favorite_image: {width: 40, height: 40},
+    favorite_image: {flex: 1, width: null, height: null},
     share_touchable_button: {
         position: 'absolute',
         width: 60,

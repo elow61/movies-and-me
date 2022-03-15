@@ -2,9 +2,10 @@
 import React from 'react'
 import { StyleSheet, View, Text, Image, TouchableOpacity } from 'react-native'
 import { getImage } from '../api/TMDB'
+import FadeIn from '../Animations/FadeIn'
 
 
-class MovieItem extends React.Component {
+class MovieItem extends React.PureComponent {
 
     _isFavorite() {
         if (this.props.isFavorite) {
@@ -15,22 +16,24 @@ class MovieItem extends React.Component {
     render() {
         const {movie, displayDetailForMovie} = this.props;
         return (
-            <TouchableOpacity style={styles.main_container} onPress={() => displayDetailForMovie(movie.id)}>
-                <Image style={styles.images} source={{uri: getImage(movie.poster_path)}}/>
-                <View style={styles.content}>
-                    <View style={styles.header}>
-                        {this._isFavorite()}
-                        <Text style={styles.title_text}>{movie.title}</Text>
-                        <Text style={styles.vote}>{movie.vote_average}</Text>
+            <FadeIn>
+                <TouchableOpacity style={styles.main_container} onPress={() => displayDetailForMovie(movie.id)}>
+                    <Image style={styles.images} source={{uri: getImage(movie.poster_path)}}/>
+                    <View style={styles.content}>
+                        <View style={styles.header}>
+                            {this._isFavorite()}
+                            <Text style={styles.title_text}>{movie.title}</Text>
+                            <Text style={styles.vote}>{movie.vote_average}</Text>
+                        </View>
+                        <View style={styles.description}>
+                            <Text style={styles.desc_text} numberOfLines={6}>{movie.overview}</Text>
+                        </View>
+                        <View style={styles.date}>
+                            <Text style={styles.date_text}>Sorti le {movie.release_date}</Text>
+                        </View>
                     </View>
-                    <View style={styles.description}>
-                        <Text style={styles.desc_text} numberOfLines={6}>{movie.overview}</Text>
-                    </View>
-                    <View style={styles.date}>
-                        <Text style={styles.date_text}>Sorti le {movie.release_date}</Text>
-                    </View>
-                </View>
-            </TouchableOpacity>
+                </TouchableOpacity>
+            </FadeIn>
         )
     }
 }

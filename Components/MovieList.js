@@ -29,7 +29,7 @@ class MovieList extends React.Component {
                 data={this.props.movies}
                 extraData={this.props.favoriteMovie}
                 keyExtractor={(item) => item.id.toString()}
-                renderItem={({item}) => <MovieItem movie={item} isFavorite={this._isFavorite(item)} displayDetailForMovie={this._displayDetailForMovie}/>}
+                renderItem={({item}) => <MovieItem movie={item} isFavorite={() => this._isFavorite(item)} displayDetailForMovie={this._displayDetailForMovie}/>}
                 onEndReachedThreshold={0.5}
                 onEndReached={() => {
                     if (!this.props.isFavorites && this.props.page < this.props.totalPages) {
